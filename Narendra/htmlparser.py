@@ -1,5 +1,4 @@
 import requests
-import re
 
 #Taking input of url from user 
 url = input()
