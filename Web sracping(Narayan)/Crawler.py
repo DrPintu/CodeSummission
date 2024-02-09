@@ -13,8 +13,7 @@ Date: 11 January 2024
 import requests as r
 
 url = input("Hey enter url and see content: ")
-# Getting text from the web.
-response = r.get(url)
+response = r.get(url)       # Getting text from the web.
 content = response.text
 
 # Defining container.
@@ -47,6 +46,7 @@ for char in content:
                     script_start = False
                 elif start_of_element == '</style>':
                     style_start = False
+                text += " "     # Adding the space after end tag to handle if no new line character is there.
             else:
                 # handling if the start of the starting html tag is encountered.
                 if '<a ' in start_of_element:
@@ -95,11 +95,12 @@ def trim_lines():
     else:
         t = text.split('\n')
     for j in t:
-        if not (j == '' or j == ' '):
-            print(f"{j.lstrip()}")
+            if not (j == '' or j == ' '):
+                print(f"{j.strip()}")
 
 
 trim_lines()        # Trimming and printing content to terminal.
+
 
 # Printing  all the url separately.
 print("\n All the URLs that the page points/links to: \n ")
