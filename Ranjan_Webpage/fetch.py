@@ -28,13 +28,36 @@ def clean(data):		# Helper function
 	start = data.find("<body")
 	end = data.find("</body>")
 	value = []
-	current = start + 5
+	current = start - 1
 	last = False		# Tells whether last string encountered was a white-space or not
 	while current < end:
 		if data[current] == '<':
-			# Skip the tag part
+			current += 1
+			# Identify the current tag going on and acc to that deal with the tag part
+			currentTag = []
+			tagCollected = False
 			while data[current] != '>':
+				if not tagCollected and not data[current].isspace():
+					currentTag.append(data[current])
+				else:
+					tagCollected = True
+
+				currTag = ''.join(currentTag)
+				if currTag in ["style", "script"]:
+					skip = data.find('</'+currTag, current)
+					current = skip
+
+				if value[-1] != "\n" and currTag == 'a':
+					value.append('\n')
 				current += 1
+		elif data[current] == '#':
+			while data[current] != ';':
+				current += 1
+		elif data[current:current + 8] == 'https://':
+			current += 8
+			while data[current] != '"':
+				current += 1
+
 		else:
 			if data[current].isspace() and not last:
 				# If the current character is a whitespace and not the last one, append a single space
@@ -73,30 +96,31 @@ def getURL(url):
 			# print(data)
 			# start1 = "http://"
 			start = "https://"
-			value = []
+			# value = []
 			index = data.find(start)
 			while index != -1:
 				# Assuming that every link is defined under double quote
 				nextSpace = data.find('"', index)
 				link = data[index:nextSpace]
-				# print(link)
-				value.append(link)
+				print(link)
+				# value.append(link)
+				# value.append("\n")
 				index = data.find(start, nextSpace)
-			return value
+			# return value
 
 		else:
 			print(response.status_code)
 
 	except Exception as e:
 		print("Got error😑")
-		return e
+		print(e)
 
 
 if __name__ == '__main__':
 	URL = sys.argv[1]
-	a = getTitle(URL) 
-	b = getBody(URL)
-	c = getURL(URL)
+	a = getTitle(URL)
 	print("Title: ", a, "\n")
-	print("Extracted links are: ", c, "\n")
-	print("Body: ", b)
+	b = getBody(URL)
+	print("Body", b, "\n")
+	print("Extracted links are:")
+	c = getURL(URL)
