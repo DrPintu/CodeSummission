@@ -11,10 +11,15 @@ def getTitle(url):	# Uniform Resource Locator
 			# print(data)
 			start = data.find("<title")
 			end = data.find("</title>")
-			# print(start)
+			current = start + 7
 			value = []
-			for i in range(start+7, end):
-				value.append(data[i])
+			while (current < end):
+				if data[current] == '#':
+					while data[current] != ';':
+						current += 1
+					current += 1
+				value.append(data[current])
+				current += 1
 			return ''.join(value)
 
 		else:
