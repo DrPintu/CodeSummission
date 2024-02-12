@@ -85,8 +85,3 @@ if __name__=="__main__":
     path = sys.argv[1]
     # Call the crawl function with the URL
     crawl(path)
-
-
-if __name__=="__main__":
-    path = sys.argv[1]
-    crawl(path)
