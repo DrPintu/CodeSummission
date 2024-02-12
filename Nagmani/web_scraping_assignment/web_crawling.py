@@ -1,24 +1,21 @@
 import requests
 
-# Function to extract and print the title of a webpage
 def title(url):
-    # Make a GET request to the specified URL
+    # This function will print the title of the webpage.
+
     response = requests.get(url)
-    
-    # Get the raw HTML content of the response
+    #This raw_content will code all the texts with script from webpages.
     raw_content = response.text
-    
-    # Find the start and end index of the title tag
     title_start = raw_content.find("<title>") + len("<title>")
     title_end = raw_content.find("</title>")
-    
-    # Extract the title and print it
     title = raw_content[title_start:title_end]
-    print("Title:", title)
+    print(title)
 
-# Function to extract and print the text content from the body of a webpage
+
+
 def body(url):
-    # Make a GET request to the specified URL
+    # This function will print the content of the body.
+
     response = requests.get(url)
     html_content = response.text
 
@@ -26,30 +23,31 @@ def body(url):
     start_index = html_content.find("<body")
 
     if start_index != -1:
-        # Move to the start of the body content
         start_index = html_content.find(">", start_index) + 1
 
         while start_index != -1:
-            # Find the end index of the current tag
             end_index = html_content.find("<", start_index)
-
+ 
             if end_index != -1:
-                # Extract text content between tags
                 text = html_content[start_index:end_index].strip()
                 if text:
                     texts.append(text)
-                # Move to the next tag
                 start_index = html_content.find(">", end_index) + 1
             else:
                 break
+    # This will remove the unwanted things from the texts and add to the result.
+    result = ''
+    for i in texts:
+        if (i[0] not in ['.', ',','', ' ', '(', ')', '[', ']', '{', '}', '@', "'", '&', '#', '^']):
+            if i[0:3] not in ['-->', 'htt', 'jQu']:
+                result = result + i + ' '
+    print(result)
 
-    # Print the extracted text content
-    for t in texts:
-        print("Text:", t)
 
-# Function to extract and print links from a webpage
+
+
 def links(url):
-    # Make a GET request to the specified URL
+    # This function will print the links in the webpage.
     response = requests.get(url)
     raw_content = response.text
 
@@ -57,30 +55,30 @@ def links(url):
 
     link = []
     while len(body_raw_content) > 1:
-        # Find the start and end index of a link
-        s = body_raw_content.find("http")
+        s = body_raw_content.find("https://")
         e = body_raw_content[s:].find('"')
-        
-        # Extract the link and append to the list
         link.append(body_raw_content[s :s + e])
-        
-        # Move to the next occurrence of a link
-        body_raw_content = body_raw_content[s + e + 1:]
-
-    # Print the extracted links
-    for j in link:
-        print("Link:", j)
-
-# Main function to execute the program
-def main():
-    # Get user input for the URL
-    url = input("Enter your Url with https: ")
+        body_raw_content = body_raw_content[s + e+1:]
     
-    # Execute the title, body, and links functions
+    for i in link:
+        print(i)
+
+
+
+
+def main():
+    url = input("Enter your Url with https :")
+    print('-----------------------------------------------------------------------------')
+    print("Tittle :")
     title(url)
+    print('-----------------------------------------------------------------------------')
+    print("Texts :")
     body(url)
+    print('-----------------------------------------------------------------------------')
+    print("Links :")
     links(url)
 
-# Entry point of the program
-if __name__ == "__main__":
-    main()
+main()
+
+
+
