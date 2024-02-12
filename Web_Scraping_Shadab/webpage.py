@@ -4,15 +4,12 @@ def title(url):
     dummy_text = url.text
     start = dummy_text.find('<title>') + len("<title>")
     end = dummy_text.find("</title>")
-    print(dummy_text[start:end])
-
-
+    return (dummy_text[start:end])
 
 def body_content(url):
     dummy_text = url.text    
     content = " "
     start = False
-    space = True
     start = dummy_text.find("<script")
     end = dummy_text.find("</script>")
     
@@ -32,15 +29,41 @@ def body_content(url):
 
     content = content.split("\n")
     modified = ""
-    prev = ""
     for line in content:
         if line.strip()=="":
             modified += line.strip()
         else:
             modified += "\n"+line.strip()
-        prev = line
         
-    print(modified)
+    return (modified)
+
+def script_style_rmv(dummy_text):
+    script_S = dummy_text.find("<script")
+    script_E = dummy_text.find("</script>")
+    
+    while script_S!=-1:
+        dummy_text = dummy_text[:script_S] + dummy_text[script_E+8:]
+        script_S = dummy_text.find("<script")
+        script_E = dummy_text.find("</script>") 
+
+    style_S = dummy_text.find("<style")
+    style_E = dummy_text.find("</style>")
+    
+    while style_S!=-1:
+        dummy_text = dummy_text[:style_S] + dummy_text[style_E+7:]
+        style_S = dummy_text.find("<style")
+        style_E = dummy_text.find("</style>")     
+
+    while "&#" in dummy_text:
+        start = dummy_text.find("&#")
+        end = dummy_text.find(";", start_index)
+        if start != -1 and end != -1:
+            dummy_text = dummy_text[:start] + dummy_text[end + 1:]
+        else:
+            break
+
+    return dummy_text 
+
 
 
 def body_link(url):
@@ -63,10 +86,9 @@ def main(url):
     
     page_title = title(url)
     Page_body = body_content(url)
-    Links = body_link(url)
     print("Title:", page_title)
     print("\nBody of the page : ", Page_body)
-    print("\nLinks availabe on webpage: ", Links)
+    print("\nLinks availabe on webpage: ", body_link(url))
     
 
 if __name__=="__main__":
