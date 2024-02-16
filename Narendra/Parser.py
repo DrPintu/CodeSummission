@@ -2,7 +2,7 @@
 import requests
 
 # Taking necessary inputs 
-url = input()
+url = input("Enter the url:- ")
 
 #html code of the url
 text = requests.get(url = url).text
