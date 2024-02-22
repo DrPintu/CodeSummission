@@ -56,7 +56,7 @@ def script_style_rmv(dummy_text):
 
     while "&#" in dummy_text:
         start = dummy_text.find("&#")
-        end = dummy_text.find(";", start_index)
+        end = dummy_text.find(";", start)
         if start != -1 and end != -1:
             dummy_text = dummy_text[:start] + dummy_text[end + 1:]
         else:
